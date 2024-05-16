@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -26,7 +28,7 @@ public class Expense {
 
     private String description;
 
-    private long amount;
+    private BigDecimal amount;
 
     private Date date;
 
