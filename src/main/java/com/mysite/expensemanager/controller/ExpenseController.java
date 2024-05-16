@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-
+import org.springframework.web.bind.annotation.PostMapping;
 
 
 @Controller
@@ -18,8 +18,20 @@ public class ExpenseController {
 
     @GetMapping("/expenses")
     public String showExpenseList(Model model) {
-        model.addAttribute("expenses", expService.getAllExpenses() );
+        model.addAttribute("expenses", expService.getAllExpenses());
         return "expenses-list";
+    }
+
+    @GetMapping("/createExpense")
+    public String createExpense() {
+        return "expense-form";
+    }
+
+    //컨트롤러에서 뷰에 object 전달하기(전달할때는 model 사용)
+    @PostMapping("/createExpense")
+    public String createExpense(Model model) {
+        model.addAttribute("expenses", new ExpenseDTO());
+        return "expense-form";
     }
 }
 
