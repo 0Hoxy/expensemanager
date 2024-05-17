@@ -9,6 +9,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
@@ -35,23 +36,28 @@ public class ExpenseService {
         return expenseDTO;
     }
 
-    public ExpenseDTO saveExpenseDetails(ExpenseDTO expenseDTO) {
+    public ExpenseDTO saveExpenseDetails(ExpenseDTO expenseDTO) throws ParseException {
         // 1. DTO => Entity
         Expense expense = mapToEntity(expenseDTO);
         // 2. DB에 저장
         expense = expRepo.save(expense);
         // 3. Entity => DTO
-        ExpenseDTO savedExpenseDTO = mapToDTO(expense);
-        return savedExpenseDTO;
+        return mapToDTO(expense);
     }
 
-    private Expense mapToEntity(ExpenseDTO expenseDTO) {
+    private Expense mapToEntity(ExpenseDTO expenseDTO) throws ParseException {
         Expense expense = modelMapper.map(expenseDTO, Expense.class);
         // 1. expenseId 입력 ( 유니크 문자열 자동생성 )
         expense.setExpenseId(UUID.randomUUID().toString());
         // 2. date 입력
-        expense.setDate(DateTimeUtil.convertStringToDate(expenseDTO.getDate()));
+        expense.setDate(DateTimeUtil.convertStringToDate(expenseDTO.getDateString()));
         return expense;
     }
 
+
+    public void deleteExpense(String id) {
+        Expense expense = expRepo.findByExpenseId(id).orElseThrow(() ->
+                new RuntimeException("해당 ID의 아이템을 찾을 수 없습니다"));
+        expRepo.delete(expense);
+    }
 }

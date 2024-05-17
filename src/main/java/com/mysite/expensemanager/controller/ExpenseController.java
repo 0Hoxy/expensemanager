@@ -8,6 +8,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.text.ParseException;
 
 
 @Controller
@@ -32,8 +35,16 @@ public class ExpenseController {
     }
 
     @PostMapping("/saveOrUpdateExpense")
-    public String saveOrUpdateExpense(@ModelAttribute("expense") ExpenseDTO expenseDTO) {
+    public String saveOrUpdateExpense(@ModelAttribute("expense") ExpenseDTO expenseDTO) throws ParseException {
         System.out.println("입력한 expenseDTO 객체 : " + expenseDTO);
+        expService.saveExpenseDetails(expenseDTO);
+        return "redirect:/expenses";
+    }
+
+    @GetMapping("/deleteExpense")
+    public String deleteExpense(@RequestParam String id) {
+        System.out.println("삭제 비용 번호 : " + id);
+        expService.deleteExpense(id);
         return "redirect:/expenses";
     }
 }

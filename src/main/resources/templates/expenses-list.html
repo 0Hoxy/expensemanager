@@ -17,6 +17,7 @@
     <th>설명</th>
     <th>요금</th>
     <th>날짜</th>
+    <th>액션</th>
     </thead>
     <tbody>
     <tr th:each="exp : ${expenses}">
@@ -24,6 +25,10 @@
         <td th:text="${exp.description}"></td>
         <td th:text="|${#numbers.formatInteger(exp.amount,0,'COMMA')}원|"></td>
         <td th:text="${exp.dateString}"></td>
+        <td>
+            <a th:href="@{/deleteExpense(id=${exp.expenseId})}" onclick="return confirm('정말로 삭제할까요?')">삭제</a>
+
+        </td>
     </tr>
     </tbody>
 </table>
